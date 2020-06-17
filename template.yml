@@ -1,0 +1,43 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: Aliyun::Serverless-2018-04-03
+Resources:
+  local-http-test:
+    Type: Aliyun::Serverless::Service
+    Properties:
+      Description: local invoke demo
+    http-demo:
+      Type: Aliyun::Serverless::Function
+      Properties:
+        Handler: index.handler
+        CodeUri: ./src/fun
+        Description: http trigger demo with nodejs8!
+        Runtime: nodejs8
+      Events:
+        http-test:
+          Type: HTTP
+          Properties:
+            AuthType: ANONYMOUS
+            Methods:
+            - GET
+            - POST
+            - PUT
+  oss-test:
+    Type: Aliyun::Serverless::Service
+    Properties:
+      Description: oss demo
+    oss-function-test:
+      Type: Aliyun::Serverless::Function
+      Properties:
+        Handler: index.ossHandler
+        CodeUri: ./src/fun/oss
+        Description: http trigger demo with nodejs8!
+        Runtime: nodejs8
+      Events:
+        http-test:
+          Type: HTTP
+          Properties:
+            AuthType: ANONYMOUS
+            Methods:
+            - GET
+            - POST
+            - PUT
