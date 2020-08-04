@@ -1,14 +1,14 @@
 ROSTemplateFormatVersion: '2015-09-01'
 Transform: Aliyun::Serverless-2018-04-03
 Resources:
-  local-http-test:
+  oss-manager:
     Type: Aliyun::Serverless::Service
     Properties:
       Description: local invoke demo
-    http-demo:
+    put:
       Type: Aliyun::Serverless::Function
       Properties:
-        Handler: index.handler
+        Handler: index.putOSS
         CodeUri: ./src/fun
         Description: http trigger demo with nodejs8!
         Runtime: nodejs8
@@ -18,18 +18,12 @@ Resources:
           Properties:
             AuthType: ANONYMOUS
             Methods:
-            - GET
             - POST
-            - PUT
-  oss-test:
-    Type: Aliyun::Serverless::Service
-    Properties:
-      Description: oss demo
-    oss-function-test:
+    get:
       Type: Aliyun::Serverless::Function
       Properties:
-        Handler: index.ossHandler
-        CodeUri: ./src/fun/oss
+        Handler: index.getOSS
+        CodeUri: ./src/fun
         Description: http trigger demo with nodejs8!
         Runtime: nodejs8
       Events:
@@ -38,6 +32,22 @@ Resources:
           Properties:
             AuthType: ANONYMOUS
             Methods:
-            - GET
-            - POST
-            - PUT
+              - GET
+  beisen-githook:
+    Type: Aliyun::Serverless::Service
+    Properties:
+      Description: beisen gitlab webhook
+    post:
+      Type: Aliyun::Serverless::Function
+      Properties:
+        Handler: beisen-gitlab-webhook.handler
+        CodeUri: ./src/fun/bs-githook
+        Description: get request from githook and post to weixin robot
+        Runtime: nodejs8
+      Events:
+        ux-italent-component:
+          Type: HTTP
+          Properties:
+            AuthType: ANONYMOUS
+            Methods:
+              - POST

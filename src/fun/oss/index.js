@@ -1,12 +1,22 @@
-const OSS = require('ali-oss');
-const getRawBody = require('raw-body');
+const OSS = require('ali-oss').Wrapper;
+const { secrets } = require('../secrets');
 
-module.exports.ossHandler = (event, context, callback) => {
-  const client = new OSS({
-    region: 'oss-cn-hangzhou',
-    accessKeyId: 'LTAI4FyNF4Zgkkxy91DXnwC9',
-    accessKeySecret: 'oMvkHMcff7gFjNtTu1S6fAUB2IsVPU',
-    bucket: 'basic-179012'
+// 初始化OSS连接
+module.exports.init = options => {
+  // 本地调试需要用文件模拟
+  const secretString = process.env.local ? secrets : process.env.OSS_SECRETS;
+  const [region, accessKeyId, accessKeySecret] = secretString.split(';');
+
+  return new OSS({
+    ...options,
+    accessKeyId,
+    accessKeySecret,
+    region
   });
-  return 'oss handler returned!';
 };
+
+// 获取
+module.exports.get = O => O;
+
+// 上传
+module.exports.put = (fileName, file, options) => O => O;

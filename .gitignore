@@ -25,3 +25,6 @@
 
 # idea
 .idea
+
+# oss secrets
+./src/fun/secrets.js
