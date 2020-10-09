@@ -44,6 +44,12 @@ Resources:
         CodeUri: ./src/fun/bs-githook
         Description: get request from githook and post to weixin robot
         Runtime: nodejs8
+        EnvironmentVariables:
+          ux_upaas_app_ux_italent_component: 01e8d0dd-d692-4e55-bafe-ea344357e1ed
+          ux_phoenix_phoenix_monorepo: c7915e89-2953-4e9b-8a15-61120c1d82be
+          ux_pps_project_ux_m_attendance_ui: db600ccb-eb41-4a35-86cf-797ea131dbce
+          ux_pps_project_ux_p_attendance_schedule: db600ccb-eb41-4a35-86cf-797ea131dbce
+          ux_pps_project_ux_attendance_ui: db600ccb-eb41-4a35-86cf-797ea131dbce
       Events:
         ux-italent-component:
           Type: HTTP

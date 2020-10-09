@@ -1,5 +1,4 @@
 var getRawBody = require('raw-body');
-var body = require('body');
 const axios = require('axios');
 
 exports.handler = (req, resp, context) => {
@@ -46,6 +45,15 @@ exports.handler = (req, resp, context) => {
 
     params.body = bodyString;
 
+    // 从环境变量中匹配仓库到机器人key的映射
+    const envKey = `${namespace}_${projectName}`;
+    // 由于gitlab支持中横线，而环境变量不支持，所以把中横线转为下划线
+    const robotKey = process.env[envKey.replace(/-/g, '_')];
+    // 匹配不到直接返回
+    if (!robotKey) {
+      return resp.send(JSON.stringify(params, null, '    '));
+    }
+
     // WIP 直接 return
     if (work_in_progress) {
       return resp.send(JSON.stringify(params, null, '    '));
@@ -60,14 +68,14 @@ exports.handler = (req, resp, context) => {
         content = `${name} 提交的 Merge Request：[${title}] 有更新：${url}`;
         break;
       case 'merge':
-        content = `${name} 提交的 Merge Request：[${title}] 已被合并`;
+        content = `[${title}] 已被 ${name} 合并`;
         break;
       default:
         return resp.send(JSON.stringify(params, null, '    '));
     }
     console.log('content', content);
 
-    axios('https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=01e8d0dd-d692-4e55-bafe-ea344357e1ed', {
+    axios(`https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=${robotKey}`, {
       method: 'post',
       data: {
         "touser" : "@all",
